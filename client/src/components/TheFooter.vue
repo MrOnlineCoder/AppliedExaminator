@@ -17,8 +17,7 @@ export default {
 
 <style scoped>
 footer {
-    width: 100vw;
-    position: absolute;
+    width: 100%;
     bottom: 0;
     left: 0;
     text-align: center;

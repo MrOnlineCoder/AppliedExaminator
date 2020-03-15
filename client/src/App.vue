@@ -1,7 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <TheNavbar />
     <div class="app-content">
+      <br>
       <router-view/>
     </div>
     <TheFooter />

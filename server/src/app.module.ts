@@ -1,10 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ExamModule } from './exam/exam.module';
+import {MongooseModule} from '@nestjs/mongoose'
+import { TestbooksModule } from './testbooks/testbooks.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost:27017/applied_exam', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }),
+    ExamModule,
+    TestbooksModule
+  ],
+  controllers: [AppController]
 })
 export class AppModule {}

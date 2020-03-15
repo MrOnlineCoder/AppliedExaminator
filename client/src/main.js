@@ -8,8 +8,14 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
+import moment from 'moment' 
+
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+
+Vue.filter('formatDatetime', (val) => {
+  return moment(val).format('DD.MM.YYYY HH:mm:ss');
+});
 
 Vue.config.productionTip = false
 
