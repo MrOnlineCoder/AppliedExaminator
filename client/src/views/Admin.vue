@@ -7,7 +7,9 @@
         <TestbooksManager @editor="testbook_editor = true" v-if="!testbook_editor"/>
         <TestbookEditor @return="testbook_editor = false" v-if="testbook_editor"/>
       </b-tab>
-      <b-tab title="Exams"></b-tab>
+      <b-tab title="Exams">
+        <ExamsEditor/>
+      </b-tab>
       <b-tab title="Submissions"></b-tab>
       <b-tab title="Users"></b-tab>
     </b-tabs>
@@ -18,6 +20,8 @@
 import TestbooksManager from '@/components/admin/TestbooksManager.vue'
 import TestbookEditor from '@/components/admin/TestbookEditor.vue'
 
+import ExamsEditor from '@/components/admin/ExamsEditor.vue'
+
 export default {
     data() {
       return {
@@ -26,7 +30,8 @@ export default {
     },
     components: {
         TestbooksManager,
-        TestbookEditor
+        TestbookEditor,
+        ExamsEditor
     }
 };
 </script>
