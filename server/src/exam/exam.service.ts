@@ -27,6 +27,24 @@ export class ExamService {
         }
     }
 
+    async getPublic() {
+        try {
+            const exams = await this.examModel.find({
+                public: true,
+                status: 'running'
+            }, {
+                testbook_id: 0
+            }).sort({
+                created_at: -1
+            }).exec();
+
+            return exams;
+        } catch (e) {
+            this.logger.error(`getPublic(): DB error`, e);
+            throw new InternalServerErrorException(`Database query error.`);
+        }
+    }
+
     async createExam(data: ExamCreateDto) {
         try {
             const exam = new this.examModel({

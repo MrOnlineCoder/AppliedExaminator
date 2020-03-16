@@ -20,8 +20,13 @@ function run(id) {
     return Base.post(`/exam/run/${id}`);
 }
 
+function getPublic() {
+    return Base.get('/exam/public');
+}
+
 export default {
     getAll,
+    getPublic,
     create,
     save,
     run

@@ -18,6 +18,13 @@ export class ExamController {
         }
     }
 
+    @Get('/public')
+    async getPublic() {
+        return {
+            exams: await this.examService.getPublic()
+        }
+    }
+
     @Post('/create')
     async createExam(@Body() body: ExamCreateDto) {
         return {

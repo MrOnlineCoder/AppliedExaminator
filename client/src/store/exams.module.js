@@ -29,6 +29,16 @@ const actions = {
             });
         });
     },
+    getPublicExams(context) {
+        return new Promise((resolve, reject) => {
+            ExamsAPI.getPublic().then(data => {
+                context.commit('setExams', data.exams);
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
     createExam(context, title) {
         return new Promise((resolve, reject) => {
             ExamsAPI.create(title).then(data => {

@@ -10,9 +10,9 @@
             <b-icon icon="house"></b-icon>
             Home
         </b-nav-item>
-        <b-nav-item to="/exam">
+        <b-nav-item to="/exams">
             <b-icon icon="question"></b-icon>
-            Exam
+            Exams
         </b-nav-item>
          <b-nav-item to="/admin">
             <b-icon icon="tools"></b-icon>
@@ -29,7 +29,7 @@
         <b-nav-form class="text-light">
             <b>
                 <b-icon icon="person"></b-icon>
-                Toder Ivan Vasilovich
+                Jon Smith
             </b>
         </b-nav-form>
 
