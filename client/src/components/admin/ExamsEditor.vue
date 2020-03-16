@@ -36,33 +36,47 @@
             <span
               v-if="currentExam.status === 'preparing'"
             >Exam in preparation is not visible to participants. You may take any actions required to prepare the exam.</span>
+            <span
+              v-if="currentExam.status === 'running'"
+            >Examination is in process, participants can pass tests and send their submissions.</span>
+   
           </small>
         </h4>
         <br />
-        <b-form-group label="Exam testbook:" description="Choose main testbook for this exam.">
-          <b-form-select v-model="currentExam.testbook_id">
-            <option
-              v-for="tb in testbooks"
-              :key="tb._id"
-              :value="tb._id"
-            >{{ tb.title }} ({{tb.category}})</option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group
-          label="Access settings"
-          description="Public exams can be viewed from main page."
-        >
-          <b-form-checkbox v-model="currentExam.public">Is public?</b-form-checkbox>
-        </b-form-group>
+        <div class="preparing-exam" v-if="currentExam.status === 'preparing'">
+          <b-form-group label="Exam testbook:" description="Choose main testbook for this exam.">
+            <b-form-select v-model="currentExam.testbook_id">
+              <option
+                v-for="tb in testbooks"
+                :key="tb._id"
+                :value="tb._id"
+              >{{ tb.title }} ({{tb.category}})</option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group
+            label="Access settings"
+            description="Public exams can be viewed from main page. Private exams can be access by exam link."
+          >
+            <b-form-checkbox v-model="currentExam.public">Is public?</b-form-checkbox>
+          </b-form-group>
+        </div>
+
+        <div class="running-exam" v-if="currentExam.status === 'running'">
+            <p>
+                <b-icon icon="reply-fill"/>
+                Exam link (for participants):
+                 <a :href="examLink">{{examLink}}</a> 
+            </p>
+           
+        </div>
+
         <hr />
-        <b-button-group>
-          <b-button variant="success">
-              <b-icon icon="cloud-upload"/>
-              Save changes to exam
+        <b-button-group v-if="currentExam.status === 'preparing'">
+          <b-button variant="success" @click="saveChanges">
+            <b-icon icon="cloud-upload" />Save changes to exam
           </b-button>
-          <b-button variant="primary">
-              <b-icon icon="play-fill"/>
-              Save changes and start exam
+          <b-button variant="primary" @click="runExam">
+            <b-icon icon="play-fill" />Save changes and start exam
           </b-button>
         </b-button-group>
       </b-card>
@@ -125,6 +139,31 @@ export default {
       this.$store.dispatch("exams/createExam", this.create_exam.title);
     },
 
+    saveChanges() {
+      this.$store.dispatch("exams/saveExam").then(() => {
+        this.$store.commit("exams/resetCurrent");
+      });
+    },
+
+    runExam() {
+      if (!this.currentExam.testbook_id) {
+        alert("You must set testbook to run an exam!");
+        return;
+      }
+
+      const yes = confirm(
+        "Are you sure? Running exam testbook and settings cannot be modified."
+      );
+
+      if (!yes) return;
+
+      this.$store.dispatch("exams/saveExam").then(() => {
+        this.$store.dispatch("exams/runExam").then(() => {
+          this.$store.commit("exams/resetCurrent");
+        });
+      });
+    },
+
     getExamStatusClass(status) {
       if (status === "preparing") return "warning";
       if (status === "running") return "primary";
@@ -147,6 +186,16 @@ export default {
     },
     testbooks() {
       return this.$store.state.testbooks.testbooks;
+    },
+
+    examLink() {
+        if (!this.currentExam) return '';
+
+        const protcol = window.location.protocol;
+        const hostname = window.location.hostname;
+        const origin = window.location.origin;
+
+        return `${origin}/exam/${this.currentExam._id}`;
     }
   }
 };

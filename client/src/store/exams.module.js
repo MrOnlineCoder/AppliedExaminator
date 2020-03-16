@@ -12,6 +12,9 @@ const mutations = {
     },
     setCurrent(state, index) {
         state.current = state.exams[index];
+    },
+    resetCurrent(state) {
+        state.current = null;
     }
 };
 
@@ -29,6 +32,26 @@ const actions = {
     createExam(context, title) {
         return new Promise((resolve, reject) => {
             ExamsAPI.create(title).then(data => {
+                context.dispatch('getAllExams');
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    saveExam(context) {
+        return new Promise((resolve, reject) => {
+            ExamsAPI.save(context.state.current).then(data => {
+                context.dispatch('getAllExams');
+                resolve();
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    },
+    runExam(context) {
+        return new Promise((resolve, reject) => {
+            ExamsAPI.run(context.state.current._id).then(data => {
                 context.dispatch('getAllExams');
                 resolve();
             }).catch(error => {

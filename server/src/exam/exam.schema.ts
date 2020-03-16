@@ -9,6 +9,8 @@ const ExamSchema = new mongoose.Schema({
     },
     title: String,
     created_at: Date,
+    started_at: Date,
+    finished_at: Date,
     public: {
         type: Boolean,
         default: false

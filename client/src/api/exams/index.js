@@ -10,7 +10,19 @@ function create(title) {
     });
 }
 
+function save(exam) {
+    return Base.post('/exam/save', {
+        exam
+    });
+}
+
+function run(id) {
+    return Base.post(`/exam/run/${id}`);
+}
+
 export default {
     getAll,
-    create
+    create,
+    save,
+    run
 }

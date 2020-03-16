@@ -1,8 +1,8 @@
-import { Injectable, Logger, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Logger, InternalServerErrorException, ForbiddenException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Exam } from './exam.interface';
 import { Model } from 'mongoose';
-import { ExamCreateDto } from './exam.dto';
+import { ExamCreateDto, ExamSaveDto } from './exam.dto';
 
 @Injectable()
 export class ExamService {
@@ -41,6 +41,48 @@ export class ExamService {
         } catch (e) {
             this.logger.error(`createExam(): DB error`, e);
             throw new InternalServerErrorException('Database write error');
+        }
+    }
+
+    async saveExam(dto: ExamSaveDto) {
+        try {
+            const id = dto.exam._id;
+
+            delete dto.exam._id;
+
+            await this.examModel.updateOne({
+                _id: id
+            }, {
+                $set: dto.exam
+            });
+
+            return true;
+        } catch(e) {
+            this.logger.error(`saveExam(): DB error`, e);
+            throw new InternalServerErrorException(`Database write error.`);
+        }
+    }
+
+    async runExam(id: string) {
+        try {
+            let exam = await this.examModel.findById(id);
+
+            if (!exam.testbook_id) {
+                throw new ForbiddenException('Exam testbook is not set.');
+            } 
+
+            exam.started_at = new Date();
+            exam.status = 'running';
+
+            exam.markModified('status');
+            exam.markModified('started_at');
+
+            const saved = await exam.save();
+
+            return saved;
+        } catch (e) {
+            this.logger.error(`saveExam(): DB error`, e);
+            throw new InternalServerErrorException(`Database write error.`);
         }
     }
 }
