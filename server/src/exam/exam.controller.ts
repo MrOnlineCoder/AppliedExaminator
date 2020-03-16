@@ -45,4 +45,9 @@ export class ExamController {
             exam: await this.examService.runExam(id)
         }
     }
+
+    @Get('/participate/:id')
+    async participateExam(@Param('id') id: string) {
+        return await this.examService.getExamAndQuestions(id);
+    }
 }

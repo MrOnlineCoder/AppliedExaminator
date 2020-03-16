@@ -3,13 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Exam } from './exam.interface';
 import { Model } from 'mongoose';
 import { ExamCreateDto, ExamSaveDto } from './exam.dto';
+import { TestbooksService } from '../testbooks/testbooks.service';
 
 @Injectable()
 export class ExamService {
     private logger = new Logger('ExamService');
 
     constructor(
-        @InjectModel('Exam') private readonly examModel: Model<Exam>
+        @InjectModel('Exam') private readonly examModel: Model<Exam>,
+        private readonly testbookService: TestbooksService
     ) {
 
     }
@@ -101,6 +103,26 @@ export class ExamService {
         } catch (e) {
             this.logger.error(`saveExam(): DB error`, e);
             throw new InternalServerErrorException(`Database write error.`);
+        }
+    }
+
+    async getExamAndQuestions(id: string) {
+        try {
+            const exam = await this.examModel.findById(id);
+
+            if (exam.status !== 'running') {
+                throw new ForbiddenException(`Exam is not running.`);
+            }
+
+            const questions = await this.testbookService.getTestbookQuestions(exam.testbook_id);
+
+            return {
+                exam,
+                questions
+            }
+        } catch(e) {
+            this.logger.error(`getExamAndQuestions(): DB error`, e);
+            throw new InternalServerErrorException(`Database query error.`);
         }
     }
 }

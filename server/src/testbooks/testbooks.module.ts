@@ -5,6 +5,7 @@ import { TestbooksController } from './testbooks.controller';
 import TestbookSchema from './testbooks.schema';
 
 @Module({
+  exports: [TestbooksService],
   imports: [
     MongooseModule.forFeature([{
       name: 'Testbook',

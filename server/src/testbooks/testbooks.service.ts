@@ -59,4 +59,19 @@ export class TestbooksService {
             throw new InternalServerErrorException('Database write error.');
         }
     }
+
+    async getTestbookQuestions(id: string, include_correct = false) {
+        try {
+            const projection = include_correct ? {} : {
+                'questions.correct': 0
+            };
+
+            const testbook = await this.testbookModel.findById(id, projection);
+
+            return testbook.questions;
+        } catch (e) {
+            this.logger.error(`getTestbookQuestions(): DB error`, e);
+            throw new InternalServerErrorException('Database query error.');
+        }
+    }
 }

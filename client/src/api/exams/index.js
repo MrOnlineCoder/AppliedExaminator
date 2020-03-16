@@ -24,10 +24,15 @@ function getPublic() {
     return Base.get('/exam/public');
 }
 
+function participate(id) {
+    return Base.get(`/exam/participate/${id}`);
+}
+
 export default {
     getAll,
     getPublic,
     create,
     save,
-    run
+    run,
+    participate
 }
