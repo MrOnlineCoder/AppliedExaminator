@@ -72,7 +72,11 @@ const actions = {
 };
 
 const getters = {
-
+    getById(state) {
+        return (id) => {
+            return state.exams.find(e => e._id == id);
+        }
+    }
 };
 
 export default {
