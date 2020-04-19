@@ -19,11 +19,14 @@
                 </b-button>
             </b-form>
         </div>
-        <div v-if="!introduce.active">
+        <div v-if="!introduce.active && answering">
             <Question 
                 :question="currentQuestion" 
                 :index="question_index"
                 @next="onNextQuestion"/>
+        </div>
+        <div v-if="answers_sent">
+            <h3>Your answers have been sent!</h3>
         </div>
     </div>
   </div>
@@ -46,9 +49,10 @@ export default {
                 active: true
             },
 
-            answers: [],
-
             question_index: 0,
+
+            answering: false,
+            answers_sent: false
         }
     },
     methods: {
@@ -59,18 +63,34 @@ export default {
                 this.exam = data.exam;
                 this.questions = data.questions;  
                 this.loading = false;  
-            })
+
+                this.$store.dispatch('submission/init', {
+                    exam_id
+                });
+            });
         },
         onStart() {
             this.introduce.active = false;
+            this.answering = true;
         },
         onNextQuestion(user_answer) {
-            this.answers.push({
+            this.$store.dispatch('submission/registerAnswer', {
                 question_id: this.currentQuestion._id,
                 user_answer
             });
 
             this.question_index++;
+
+            if (this.question_index >= this.questions.length) {
+                this.answering = false;
+                this.sendAnswers();
+            }
+        },
+        sendAnswers() {
+            this.$store.dispatch('submission/send', {
+                participant: this.introduce.name
+            });
+            this.answers_sent = true;
         }
     },
     mounted() {

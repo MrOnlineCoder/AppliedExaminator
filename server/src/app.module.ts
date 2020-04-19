@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { ExamModule } from './exam/exam.module';
 import {MongooseModule} from '@nestjs/mongoose'
 import { TestbooksModule } from './testbooks/testbooks.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { TestbooksModule } from './testbooks/testbooks.module';
       useUnifiedTopology: true
     }),
     ExamModule,
-    TestbooksModule
+    TestbooksModule,
+    SubmissionsModule
   ],
   controllers: [AppController]
 })

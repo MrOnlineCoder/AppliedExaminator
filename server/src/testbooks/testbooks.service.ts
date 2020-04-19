@@ -1,4 +1,4 @@
-import { Injectable, Logger, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Logger, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Testbook } from './testbooks.interface';
 import { Model } from 'mongoose';
@@ -23,6 +23,23 @@ export class TestbooksService {
             return testbooks;
         } catch(e) {
             this.logger.error(`getTestbooks(): DB error`, e);
+            throw new InternalServerErrorException('Database query error');
+        }
+    }
+
+    async getTestbook(id: string): Promise<Testbook> {
+        try {
+            const testbook = await this.testbookModel.findOne({
+                _id: id
+            }).exec();
+
+            if (!testbook) {
+                throw new NotFoundException(`Testbook not found.`);
+            }
+
+            return testbook;
+        } catch (e) {
+            this.logger.error(`getTestbook(): DB error`, e);
             throw new InternalServerErrorException('Database query error');
         }
     }

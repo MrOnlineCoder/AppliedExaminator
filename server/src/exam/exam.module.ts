@@ -14,6 +14,7 @@ import { TestbooksModule } from '../testbooks/testbooks.module';
     TestbooksModule
   ],
   controllers: [ExamController],
-  providers: [ExamService]
+  providers: [ExamService],
+  exports: [ExamService]
 })
 export class ExamModule {}
