@@ -10,7 +10,9 @@
       <b-tab title="Exams">
         <ExamsEditor/>
       </b-tab>
-      <b-tab title="Submissions"></b-tab>
+      <b-tab title="Submissions">
+        <Submissions />
+      </b-tab>
       <b-tab title="Users"></b-tab>
     </b-tabs>
   </div>
@@ -19,6 +21,7 @@
 <script>
 import TestbooksManager from '@/components/admin/TestbooksManager.vue'
 import TestbookEditor from '@/components/admin/TestbookEditor.vue'
+import Submissions from '@/components/admin/Submissions.vue'
 
 import ExamsEditor from '@/components/admin/ExamsEditor.vue'
 
@@ -31,7 +34,8 @@ export default {
     components: {
         TestbooksManager,
         TestbookEditor,
-        ExamsEditor
+        ExamsEditor,
+        Submissions
     }
 };
 </script>

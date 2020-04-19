@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { SubmissionsService } from './submissions.service';
 import { SubmissionSendDto } from './submissions.dto';
 
@@ -17,6 +17,13 @@ export class SubmissionsController {
 
         return {
             success: true
+        }
+    }
+
+    @Get('/all')
+    async getAll() {
+        return {
+            submissions: await this.submissionsService.getSubmissions()
         }
     }
 }

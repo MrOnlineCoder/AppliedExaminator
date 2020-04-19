@@ -8,6 +8,11 @@ function send(exam_id, participant, answers) {
     })
 }
 
+function getAll() {
+    return Base.get(`/submissions/all`);
+}
+
 export default {
-    send
+    send,
+    getAll
 }

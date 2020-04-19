@@ -70,4 +70,17 @@ export class SubmissionsService {
 
         return score;
     }
+
+    async getSubmissions() {
+        try {
+            const list = await this.submissionModel.find().sort({
+                created_at: -1
+            }).exec();
+
+            return list;
+        } catch(e) {
+            this.logger.error(`getSubmissions() db error: ${e}`);
+            throw new InternalServerErrorException(`Submissions database query error.`);
+        }
+    }
 }
